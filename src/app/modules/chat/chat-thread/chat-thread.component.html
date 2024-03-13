@@ -1,0 +1,68 @@
+<div class="relative grow-0 shrink-0 size-14">
+  <img class="w-full h-full rounded-full" [src]="thread.avatar" alt="avatar" />
+  <div
+    class="absolute bottom-0 right-0 border-default size-4 rounded-full"
+    [ngClass]="{
+      'border-2': thread.status !== 0,
+      'bg-zinc-500': thread.status === 1,
+      'bg-green-600': thread.status === 2,
+      'bg-red-600': thread.status === 3
+    }"
+  ></div>
+</div>
+<div class="grow shrink flex flex-col gap-0.5">
+  <span class="font-bold text-base text-sm">{{ thread.title }}</span>
+  <span class="text-zinc-500 dark:text-zinc-300 line-clamp-2 text-xs">{{
+    thread.lastMessage.text
+  }}</span>
+</div>
+<div class="grow-0 shrink-0 flex flex-col justify-between items-center">
+  @if (thread.unreadCount) {
+    <div
+      class="text-white rounded-full text-sm px-1.5"
+      [ngClass]="{
+        'bg-teal-600': !thread.muted,
+        'bg-zinc-500': thread.muted
+      }"
+    >
+      {{ thread.unreadCount }}
+    </div>
+  } @else {
+    <div></div>
+  }
+  <!--  <div>-->
+  <!--    <button-->
+  <!--      data-ripple-light="true"-->
+  <!--      data-popover-target="popover-bottom-start"-->
+  <!--      class="!rounded-full shrink-0 grow-0 !size-10 !min-h-10 !max-h-10 !min-w-10 !max-w-10"-->
+  <!--    >-->
+  <!--      Bottom Start-->
+  <!--    </button>-->
+  <!--    <div-->
+  <!--      data-popover="popover-bottom-start"-->
+  <!--      data-popover-placement="bottom-start"-->
+  <!--      class="absolute z-10 w-max whitespace-normal break-words rounded-lg border border-blue-gray-50 bg-white p-4 font-sans text-sm font-normal text-blue-gray-500 shadow-lg shadow-blue-gray-500/10 focus:outline-none"-->
+  <!--    >-->
+  <!--      <div class="flex flex-col bg-default w-full">-->
+  <!--        <label-->
+  <!--          class="px-4 py-2 flex gap-2 w-full hover:bg-base/[.1] transition-all cursor-pointer"-->
+  <!--        >-->
+  <!--&lt;!&ndash;          <fd-icon class="!text-base !text-3xl" glyph="bell-2"></fd-icon>&ndash;&gt;-->
+  <!--          <span class="!text-base">بی‌صدا کردن</span>-->
+  <!--        </label>-->
+  <!--        <label-->
+  <!--          class="px-4 py-2 flex gap-2 w-full hover:bg-base/[.1] transition-all cursor-pointer"-->
+  <!--        >-->
+  <!--&lt;!&ndash;          <fd-icon class="!text-base !text-3xl" glyph="pushpin-on"></fd-icon>&ndash;&gt;-->
+  <!--          <span class="!text-base">سنجاق کردن</span>-->
+  <!--        </label>-->
+  <!--        <label-->
+  <!--          class="px-4 py-2 flex gap-2 w-full hover:bg-base/[.1] transition-all cursor-pointer"-->
+  <!--        >-->
+  <!--&lt;!&ndash;          <fd-icon class="!text-base !text-3xl" glyph="delete"></fd-icon>&ndash;&gt;-->
+  <!--          <span class="!text-base">حذف</span>-->
+  <!--        </label>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+</div>

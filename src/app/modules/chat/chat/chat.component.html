@@ -1,0 +1,172 @@
+<div
+  class="flex w-full h-screen bg-gradient-to-r from-teal-300 to-teal-100 dark:from-teal-800 dark:to-teal-950"
+>
+  <div class="bg-mine 2xl:grow shrink h-full"></div>
+  <div
+    class="h-full w-full flex 2xl:container shrink-0 relative grow 2xl:grow-0"
+  >
+    <div class="grow-0 shrink-0 w-full md:w-96 p-0 md:p-6">
+      <div
+        class="flex flex-col w-full h-full overflow-hidden md:rounded-2xl md:border md:border-default"
+      >
+        <chat-threads-list-toolbar></chat-threads-list-toolbar>
+        <chat-threads-list>
+          @for (thread of threads(); track thread.id) {
+            <chat-thread
+              [thread]="thread"
+              (click)="selectThread(thread)"
+            ></chat-thread>
+          }
+        </chat-threads-list>
+      </div>
+    </div>
+    @if (!selectedThread()) {
+      <div class="grow shrink relative md:py-6 md:pe-6 hidden md:flex">
+        <div
+          class="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 flex flex-col gap-8 items-center"
+        >
+          <img
+            src="assets/not-selected-chat.png"
+            class="w-64 opacity-25"
+            alt=""
+          />
+        </div>
+      </div>
+    }
+    <div
+      class="grow shrink relative md:py-6 md:pe-6"
+      [ngClass]="{
+        hidden: !selectedThread(),
+        flex: selectedThread()
+      }"
+    >
+      @if (selectedThread()) {
+        <div
+          @inContentAnimation
+          class="h-full w-full flex flex-col relative md:border-default overflow-hidden md:border md:rounded-2xl"
+        >
+          <chat-content-toolbar
+            [thread]="selectedThread()"
+          ></chat-content-toolbar>
+          <chat-content #chatContentElement id="chat-container">
+            @if (messages() !== null) {
+              <div class="h-full w-full">
+                @for (message of messages(); track message.id) {
+                  <chat-message
+                    [message]="message"
+                    [showSender]="true"
+                    [nextIsSame]="
+                      messages()?.[$index + 1]?.owner?.id === message.owner.id
+                    "
+                    [pervIsSame]="
+                      messages()?.[$index - 1]?.owner?.id === message.owner.id
+                    "
+                    [badge]="
+                      !this.messages()?.[$index - 1] ||
+                      message.createdAt.getDay() !==
+                        this.messages()?.[$index - 1]?.createdAt?.getDay()
+                    "
+                    [nextHasBadge]="
+                      !!this.messages()?.[$index + 1] &&
+                      message.createdAt.getDay() !==
+                        this.messages()?.[$index + 1]?.createdAt?.getDay() &&
+                      message.owner.id ===
+                        this.messages()?.[$index + 1]?.owner?.id
+                    "
+                    [badgeLabel]="message.createdAt | utilChatTimeBadge"
+                    (reply)="replyingMessage.set($event)"
+                  ></chat-message>
+                }
+              </div>
+              @if (replyingMessage()) {
+                <div class="h-14"></div>
+              }
+            }
+          </chat-content>
+          <div class="w-full relative">
+            @if (replyingMessage(); as message) {
+              <div
+                @inOutReplyingMessage
+                class="w-full px-2 py-1 border-l-4 border-l-mine flex gap-2 te-items-center absolute z-0 bg-default right-0 -top-14"
+              >
+                <button
+                  class="grow-0 shrink-0"
+                  (click)="replyingMessage.set(undefined)"
+                >
+                  close
+                </button>
+                <div class="flex flex-col grow shrink overflow-hidden">
+                  <span class="font-bold">{{ message.owner.name }}</span>
+                  <span class="truncate">{{
+                    message.text ?? message.file?.name ?? message.image?.name
+                  }}</span>
+                </div>
+                <div class="w-8 shrink-0 grow-0"></div>
+              </div>
+            }
+            <div
+              class="w-full p-2 flex gap-2 border-t border-t-default bg-default-7 backdrop-blur-lg items-end z-10"
+            >
+              <!--              <button-->
+              <!--                data-ripple-light="true"-->
+              <!--                data-popover-target="popover-top-end"-->
+              <!--                class="!rounded-full shrink-0 grow-0 !size-10 !min-h-10 !max-h-10 !min-w-10 !max-w-10"-->
+              <!--                (click)="addAttachment()"-->
+              <!--              >-->
+              <!--                AA-->
+              <!--              </button>-->
+              <!--              <div-->
+              <!--                data-popover="popover-top-end"-->
+              <!--                data-popover-placement="top-end"-->
+              <!--                class="absolute z-10 w-max whitespace-normal break-words rounded-lg border border-blue-gray-50 bg-white p-4 font-sans text-sm font-normal text-blue-gray-500 shadow-lg shadow-blue-gray-500/10 focus:outline-none"-->
+              <!--              >-->
+              <!--                <div class="flex flex-col bg-default w-full">-->
+              <!--                  <label-->
+              <!--                    class="px-4 py-2 flex gap-2 w-full hover:bg-base/[.1] transition-all cursor-pointer"-->
+              <!--                  >-->
+              <!--                    &lt;!&ndash;                                  <fd-icon class="!text-base !text-3xl" glyph="camera"></fd-icon>&ndash;&gt;-->
+              <!--                    <span class="!text-base">ارسال عکس</span>-->
+              <!--                    <input class="hidden" type="file" id="img" name="img" accept="image/*"/>-->
+              <!--                  </label>-->
+              <!--                  <label-->
+              <!--                    class="px-4 py-2 flex gap-2 w-full hover:bg-base/[.1] transition-all cursor-pointer"-->
+              <!--                  >-->
+              <!--                    &lt;!&ndash;                                  <fd-icon class="!text-base !text-3xl" glyph="add-document"></fd-icon>&ndash;&gt;-->
+              <!--                    <span class="!text-base">ارسال فایل</span>-->
+              <!--                    <input class="hidden" type="file" id="file" name="file"-->
+              <!--                           accept="file/*"/>-->
+              <!--                  </label>-->
+              <!--                </div>-->
+              <!--              </div>-->
+              <div class="inline-flex relative grow shrink">
+                @if (!messageText.length) {
+                  <span
+                    class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 dark:text-zinc-500 -z-10"
+                  >
+                    Message...
+                  </span>
+                }
+                <div
+                  id="chat-textarea"
+                  class="inline-block w-full whitespace-pre-line rounded-3xl border border-default px-4 py-2 max-h-32 overflow-auto resize text-base"
+                  role="textbox"
+                  contenteditable
+                  ngDefaultControl
+                  (keydown.enter)="sendMessage()"
+                  (input)="checkInput($event)"
+                ></div>
+              </div>
+              <button
+                class="!rounded-full shrink-0 grow-0 !size-10 !min-h-10 !max-h-10 !min-w-10 !max-w-10"
+                (click)="sendMessage()"
+              >
+                send
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+  <div class="bg-mine 2xl:grow shrink h-full"></div>
+</div>

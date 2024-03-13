@@ -1,0 +1,189 @@
+<div
+  class="w-full px-4 flex flex-wrap"
+  [ngClass]="{
+    'pb-1': nextIsSame,
+    'pb-3': !nextIsSame
+  }"
+>
+  @if (badge) {
+    <div class="w-full pb-6 pt-5">
+      <div
+        class="w-fit bg-zinc-500 text-white px-4 mx-auto rounded-full text-md"
+      >
+        {{ badgeLabel }}
+      </div>
+    </div>
+  }
+  <div
+    class="w-full flex gap-2 items-end relative"
+    [ngClass]="{
+      'justify-start': message.owner.id !== userId,
+      'flex-row-reverse': message.owner.id === userId,
+      'ms-14': nextIsSame && !nextHasBadge && message.owner.id !== userId,
+      'me-4': message.owner.id === userId
+    }"
+  >
+    @if ((!nextIsSame || nextHasBadge) && message.owner.id !== userId) {
+      <div class="rounded-full overflow-hidden size-12">
+        <img class="w-full h-full" [src]="message.owner.avatar" alt="" />
+      </div>
+    }
+    @if (!nextIsSame || nextHasBadge) {
+      <div
+        class="bg-transparent overflow-hidden size-3 absolute bottom-0 border-[6px] border-t-transparent"
+        [ngClass]="{
+          '-right-3 border-b-mine border-l-mine border-r-transparent':
+            message.owner.id === userId,
+          'left-11 border-b-default border-r-default border-l-transparent':
+            message.owner.id !== userId
+        }"
+      ></div>
+    }
+    <div
+      @inPaneAnimation
+      class="max-w-[80%] min-w-40 rounded-2xl text-base relative overflow-hidden"
+      [ngClass]="{
+        '!rounded-br-none':
+          message.owner.id === userId &&
+          (nextHasBadge || (nextIsSame && !nextHasBadge) || !nextIsSame),
+        '!rounded-bl-none':
+          message.owner.id !== userId &&
+          (nextHasBadge || (nextIsSame && !nextHasBadge) || !nextIsSame),
+        '!rounded-tr-none': message.owner.id === userId && pervIsSame && !badge,
+        '!rounded-tl-none': message.owner.id !== userId && pervIsSame && !badge
+      }"
+    >
+      @if (
+        message.owner.id !== userId && showSender && (!pervIsSame || badge)
+      ) {
+        <div
+          [ngClass]="{
+            'bg-mine': message.owner.id === userId && !message.image,
+            'bg-default': message.owner.id !== userId && !message.image,
+            'absolute top-0 right-0 pb-8 w-full rounded-tr-2xl bg-gradient-to-b to-transparent':
+              message.image,
+            'from-mine': message.owner.id === userId && message.image,
+            'from-default': message.owner.id !== userId && message.image
+          }"
+          class="font-bold text-base px-3 pt-2 z-10"
+        >
+          {{ message.owner.name }}
+        </div>
+      }
+      @if (message.image) {
+        @if (imageRatio(message.image); as image) {
+          <div
+            [ngClass]="{
+              'bg-mine-3': message.owner.id === userId,
+              'bg-default-3': message.owner.id !== userId
+            }"
+            class="flex justify-center items-center bg-default-3 relative"
+          >
+            <a
+              [download]="message.image.name"
+              href="assets/bg-chat.jpg"
+              target="_blank"
+              class="absolute w-full h-full bg-black/[.4] dark:bg-white/[.4] opacity-0 hover:opacity-100 transition-all cursor-pointer flex justify-center items-center"
+            >
+              <!--                    <fd-icon class="!text-default !text-3xl" glyph="download"></fd-icon>-->
+              download
+            </a>
+            <img
+              [ngStyle]="{
+                width: image.displayWidth + 'px',
+                height: image.displayHeight + 'px'
+              }"
+              [src]="image.url"
+              alt=""
+            />
+          </div>
+        }
+      }
+      @if (message.file; as file) {
+        <div
+          [ngClass]="{
+            'bg-mine': message.owner.id === userId,
+            'bg-default': message.owner.id !== userId
+          }"
+          class="px-2 pt-2 w-full flex gap-2"
+        >
+          <a
+            [download]="file.name"
+            href="assets/bg-chat.jpg"
+            target="_blank"
+            class="shrink-0 row-0 size-12 rounded-lg bg-orange-400 flex justify-center items-center cursor-pointer transition-all hover:bg-orange-600"
+          >
+            <span class="font-bold leading-6 text-lg text-white">
+              {{ file.ext }}
+            </span>
+          </a>
+          <div class="flex flex-col">
+            <span class="font-bold text-md text-base w-full truncate">
+              {{ file.name }}</span
+            >
+            <span
+              class="text-sm text-zinc-500 dark:text-zinc-400 w-full truncate"
+            >
+              {{ file.size }}</span
+            >
+          </div>
+        </div>
+      }
+      @if (message.text) {
+        <div
+          [ngClass]="{
+            'bg-mine': message.owner.id === userId,
+            'bg-default': message.owner.id !== userId
+          }"
+          class="whitespace-pre-line px-2 pt-1"
+          [innerHTML]="message.text"
+        ></div>
+      }
+      <div
+        class="flex w-full px-2 pt-1 pb-2 items-center gap-2 justify-end"
+        [ngClass]="{
+          'bg-mine flex-row-reverse': message.owner.id === userId,
+          'bg-default': message.owner.id !== userId
+        }"
+      >
+        <span class="text-xs text-zinc-600 dark:text-zinc-300">{{
+          message.createdAt | utilDateToHhMm
+        }}</span>
+        <!--              <button-->
+        <!--                data-ripple-light="true"-->
+        <!--                data-popover-target="popover-bottom-start"-->
+        <!--                class="!rounded-full shrink-0 grow-0 !size-10 !min-h-10 !max-h-10 !min-w-10 !max-w-10"-->
+        <!--              >-->
+        <!--                AA-->
+        <!--              </button>-->
+        <!--              <div-->
+        <!--                data-popover="popover-bottom-start"-->
+        <!--                data-popover-placement="bottom-start"-->
+        <!--                class="absolute z-10 w-max whitespace-normal break-words rounded-lg border border-blue-gray-50 bg-white p-4 font-sans text-sm font-normal text-blue-gray-500 shadow-lg shadow-blue-gray-500/10 focus:outline-none"-->
+        <!--              >-->
+        <!--                <div class="flex flex-col bg-default w-full">-->
+        <!--                  <label-->
+        <!--                    class="px-4 py-2 flex gap-2 w-full hover:bg-base/[.1] transition-all cursor-pointer"-->
+        <!--                    (click)="reply.emit(message)"-->
+        <!--                  >-->
+        <!--&lt;!&ndash;                    <fd-icon class="!text-base !text-3xl" glyph="undo"></fd-icon>&ndash;&gt;-->
+        <!--                    <span class="!text-base">پاسخ دادن</span>-->
+        <!--                  </label>-->
+        <!--                  <label-->
+        <!--                    class="px-4 py-2 flex gap-2 w-full hover:bg-base/[.1] transition-all cursor-pointer"-->
+        <!--                  >-->
+        <!--&lt;!&ndash;                    <fd-icon class="!text-base !text-3xl" glyph="forward"></fd-icon>&ndash;&gt;-->
+        <!--                    <span class="!text-base">ارسال کردن</span>-->
+        <!--                  </label>-->
+        <!--                  <label-->
+        <!--                    class="px-4 py-2 flex gap-2 w-full hover:bg-base/[.1] transition-all cursor-pointer"-->
+        <!--                  >-->
+        <!--&lt;!&ndash;                    <fd-icon class="!text-base !text-3xl" glyph="delete"></fd-icon>&ndash;&gt;-->
+        <!--                    <span class="!text-base">حذف</span>-->
+        <!--                  </label>-->
+        <!--                </div>-->
+        <!--              </div>-->
+      </div>
+    </div>
+  </div>
+</div>

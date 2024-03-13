@@ -1,1 +1,82 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-base {
+    @apply text-zinc-950 dark:text-zinc-50;
+  }
+
+  .bg-default {
+    @apply bg-zinc-200 dark:bg-zinc-700;
+
+    &-3 {
+      @apply bg-zinc-200/[.3] dark:bg-zinc-700/[.3];
+    }
+
+    &-7 {
+      @apply bg-zinc-200/[.7] dark:bg-zinc-700/[.7];
+    }
+  }
+
+  .from-default {
+    @apply from-zinc-200 dark:from-zinc-700;
+  }
+
+  .border {
+    &-default {
+      @apply border-zinc-200 dark:border-zinc-700;
+    }
+
+    &-b-default {
+      @apply border-b-zinc-200 dark:border-b-zinc-700;
+    }
+
+    &-t-default {
+      @apply border-t-zinc-200 dark:border-t-zinc-700;
+    }
+
+    &-l-default {
+      @apply border-l-zinc-200 dark:border-l-zinc-700;
+    }
+
+    &-r-default {
+      @apply border-r-zinc-200 dark:border-r-zinc-700;
+    }
+  }
+
+  .bg-mine {
+    @apply bg-teal-400 dark:bg-teal-700;
+
+    &-3 {
+      @apply bg-teal-400/[.3] dark:bg-teal-700/[.3];
+    }
+  }
+
+  .from-mine {
+    @apply from-teal-400 dark:from-teal-700;
+  }
+
+  .border {
+    &-mine {
+      @apply border-teal-400 dark:border-teal-700;
+    }
+
+    &-b-mine {
+      @apply border-b-teal-400 dark:border-b-teal-700;
+    }
+
+    &-t-mine {
+      @apply border-t-teal-400 dark:border-t-teal-700;
+    }
+
+    &-l-mine {
+      @apply border-l-teal-400 dark:border-l-teal-700;
+    }
+
+    &-r-mine {
+      @apply border-r-teal-400 dark:border-r-teal-700;
+    }
+  }
+}
