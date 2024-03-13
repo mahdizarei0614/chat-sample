@@ -19,7 +19,7 @@ jobs:
       - name: npm install and npm run CI commands
         run: |
           npm i -f
-          npm run build:ci
+          npm run build
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
