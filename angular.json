@@ -48,6 +48,22 @@
               ],
               "outputHashing": "all"
             },
+            "gh-pages": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputHashing": "all",
+              "baseHref": "https://mahdizarei0614.github.io/chat-sample/"
+            },
             "development": {
               "optimization": false,
               "extractLicenses": false,
