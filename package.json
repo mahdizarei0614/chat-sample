@@ -9,7 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:chat-sample": "node dist/chat-sample/server/server.mjs",
-    "lint": "ng lint",
+    "lint": "ng lint --fix",
     "prepare": "husky"
   },
   "private": true,

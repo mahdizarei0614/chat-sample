@@ -1,9 +1,7 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
-  inject,
   OnDestroy,
   OnInit,
   signal,
@@ -77,14 +75,17 @@ import { isBrowser } from '../../../app.component';
 export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild('chatContentElement', { read: ElementRef })
   chatContentElement!: ElementRef;
-  private _cdr = inject(ChangeDetectorRef);
   user = {
     name: 'Mahdi Zarei',
   };
   randomNameArr =
-    'Mahdi Mohammad Ali Bahareh Amir Hossein Aria Zahra Mehrdad'.split(' ');
+    'Mahdi Mohammad Ali Bahareh Amir Hossein Aria Zahra Mehrdad Ghazal Nima Hossein Danial Parsa Hengameh Esmaeil Eliyas Tayebeh'.split(
+      ' ',
+    );
   randomFamilyArr =
-    'Zarei Ghanbari Mosayeban Kazemi Tahmasb Radmand Razavi'.split(' ');
+    'Zarei Ghanbari Mosayeban Kazemi Tahmasb Radmand Razavi Yari Khoshyari Vafadar Salemi PourKarim Abdoli Zandieh'.split(
+      ' ',
+    );
   randomTextArr = (
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut ' +
     'labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
