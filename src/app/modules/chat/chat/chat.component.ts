@@ -2,8 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  OnDestroy,
-  OnInit,
   signal,
   ViewChild,
   WritableSignal,
@@ -72,20 +70,12 @@ import { isBrowser } from '../../../app.component';
     ]),
   ],
 })
-export class ChatComponent implements OnInit, OnDestroy {
+export class ChatComponent {
   @ViewChild('chatContentElement', { read: ElementRef })
   chatContentElement!: ElementRef;
   user = {
     name: 'Mahdi Zarei',
   };
-  randomNameArr =
-    'Mahdi Mohammad Ali Bahareh Amir Hossein Aria Zahra Mehrdad Ghazal Nima Hossein Danial Parsa Hengameh Esmaeil Eliyas Tayebeh'.split(
-      ' ',
-    );
-  randomFamilyArr =
-    'Zarei Ghanbari Mosayeban Kazemi Tahmasb Radmand Razavi Yari Khoshyari Vafadar Salemi PourKarim Abdoli Zandieh'.split(
-      ' ',
-    );
   randomTextArr = (
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut ' +
     'labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
@@ -99,13 +89,15 @@ export class ChatComponent implements OnInit, OnDestroy {
       .map(() => ({
         id: Math.random() * 1000,
         title:
-          this.randomNameArr[
-            Math.floor(this.randomNameArr.length * Math.random())
+          this.randomTextArr[
+            Math.floor(this.randomTextArr.length * Math.random())
           ] +
           ' ' +
-          this.randomFamilyArr[
-            Math.floor(this.randomFamilyArr.length * Math.random())
-          ],
+          this.randomTextArr[
+            Math.floor(this.randomTextArr.length * Math.random())
+          ]
+            .replaceAll(',', '')
+            .replaceAll('.', ''),
         avatar:
           'https://picsum.photos/100?workAround=' +
           Math.floor(Math.random() * 100),
@@ -141,18 +133,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   messages: WritableSignal<Message[] | undefined> = signal(undefined);
   replyingMessage: WritableSignal<Message | undefined> = signal(undefined);
   messageText = '';
-
-  ngOnInit() {
-    if (isBrowser()) {
-      document.body.classList.add('chat-mode');
-    }
-  }
-
-  ngOnDestroy() {
-    if (isBrowser()) {
-      document.body.classList.remove('chat-mode');
-    }
-  }
 
   scrollToBottom(force = false, instant = false): void {
     const container = this.chatContentElement?.nativeElement;
@@ -195,40 +175,42 @@ export class ChatComponent implements OnInit, OnDestroy {
           readAt: new Date(),
         },
       ]);
-      this.messageText = '';
-      if (isBrowser()) {
-        const inputMessage = document.getElementById('chat-textarea');
-        if (inputMessage) {
-          inputMessage.focus();
-          inputMessage.innerText = '';
-        }
-        this.scrollToBottom(true);
-        setTimeout(() => {
-          this.messages?.set([
-            ...(this.messages() as Message[]),
-            {
-              id: Math.random() * 1000,
-              owner: {
-                id: 4321,
-                avatar:
-                  'https://picsum.photos/100?workAround=' +
-                  Math.floor(Math.random() * 100),
-                name: this.selectedThread()?.title ?? '',
-              },
-              text: this.shuffle(
-                this.randomTextArr.slice(
-                  0,
-                  1 + Math.floor(this.randomTextArr.length * Math.random()),
-                ),
-              ).join(' '),
-              createdAt: new Date(),
-              deliveredAt: new Date(),
-              readAt: new Date(),
-            },
-          ]);
+      setTimeout(() => {
+        this.messageText = '';
+        if (isBrowser()) {
+          const inputMessage = document.getElementById('chat-textarea');
+          if (inputMessage) {
+            inputMessage.focus();
+            inputMessage.innerText = '';
+          }
           this.scrollToBottom(true);
-        }, 2000);
-      }
+          setTimeout(() => {
+            this.messages?.set([
+              ...(this.messages() as Message[]),
+              {
+                id: Math.random() * 1000,
+                owner: {
+                  id: 4321,
+                  avatar:
+                    'https://picsum.photos/100?workAround=' +
+                    Math.floor(Math.random() * 100),
+                  name: this.selectedThread()?.title ?? '',
+                },
+                text: this.shuffle(
+                  this.randomTextArr.slice(
+                    0,
+                    1 + Math.floor(this.randomTextArr.length * Math.random()),
+                  ),
+                ).join(' '),
+                createdAt: new Date(),
+                deliveredAt: new Date(),
+                readAt: new Date(),
+              },
+            ]);
+            this.scrollToBottom(true);
+          }, 2000);
+        }
+      });
     }
   }
 

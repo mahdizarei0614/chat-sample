@@ -1,4 +1,7 @@
 @if (thread) {
+  <button class="text-3xl" (click)="back.emit()">&#10094;</button>
+  <div class="flex gap-2">
+
   <img [src]="thread.avatar" class="size-12 rounded-full" alt="avatar" />
   <div class="flex grow shrink flex-col items-start justify-between">
     <span class="text-lg font-bold text-base">{{ thread.title }}</span>
@@ -38,5 +41,6 @@
         }
       }
     </span>
+  </div>
   </div>
 }

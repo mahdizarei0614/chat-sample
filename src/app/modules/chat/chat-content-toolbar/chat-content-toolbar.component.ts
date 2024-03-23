@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { NgClass } from '@angular/common';
 import { Thread } from '../chat/chat.component';
 
@@ -11,9 +17,10 @@ import { Thread } from '../chat/chat.component';
   imports: [NgClass],
   host: {
     class:
-      'flex gap-2 justify-between items-center px-4 w-full py-2 h-16 flex bg-default-7 backdrop-blur-lg z-10',
+      'flex gap-4 justify-start items-center px-4 w-full py-2 h-16 flex bg-default-7 backdrop-blur-lg z-10',
   },
 })
 export class ChatContentToolbarComponent {
   @Input() thread?: Thread;
+  @Output() back = new EventEmitter<void>();
 }
