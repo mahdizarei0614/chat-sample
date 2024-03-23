@@ -4,8 +4,11 @@
 @tailwind utilities;
 
 @layer utilities {
-  .text-base {
+  .text-basic {
     @apply text-zinc-950 dark:text-zinc-50;
+  }
+  .text-reverse {
+    @apply text-zinc-50 dark:text-zinc-950;
   }
 
   .bg-default {

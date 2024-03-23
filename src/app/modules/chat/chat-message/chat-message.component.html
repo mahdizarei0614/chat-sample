@@ -41,7 +41,7 @@
     }
     <div
       @inPaneAnimation
-      class="max-w-[80%] min-w-40 rounded-2xl text-base relative overflow-hidden"
+      class="max-w-[80%] min-w-40 rounded-2xl text-basic relative overflow-hidden"
       [ngClass]="{
         '!rounded-br-none':
           message.owner.id === userId &&
@@ -65,7 +65,7 @@
             'from-mine': message.owner.id === userId && message.image,
             'from-default': message.owner.id !== userId && message.image
           }"
-          class="font-bold text-base px-3 pt-2 z-10"
+          class="font-bold text-basic px-3 pt-2 z-10"
         >
           {{ message.owner.name }}
         </div>
@@ -83,11 +83,10 @@
               [download]="message.image.name"
               href="assets/bg-chat.jpg"
               target="_blank"
-              class="absolute w-full h-full bg-black/[.4] dark:bg-white/[.4] opacity-0 hover:opacity-100 transition-all cursor-pointer flex justify-center items-center"
+              class="absolute w-full h-full bg-black/[.4] text-reverse dark:bg-white/[.4] opacity-0 hover:opacity-100 transition-all cursor-pointer flex justify-center items-center text-3xl"
             >
-              <!--                    <fd-icon class="!text-default !text-3xl" glyph="download"></fd-icon>-->
-              download
-            </a>
+            &#11206;
+          </a>
             <img
               [ngStyle]="{
                 width: image.displayWidth + 'px',
@@ -118,7 +117,7 @@
             </span>
           </a>
           <div class="flex flex-col">
-            <span class="font-bold text-md text-base w-full truncate">
+            <span class="font-bold text-md text-basic w-full truncate">
               {{ file.name }}</span
             >
             <span
