@@ -76,54 +76,66 @@ export class ChatComponent {
   user = {
     name: 'Mahdi Zarei',
   };
-  randomTextArr = (
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut ' +
-    'labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris ' +
-    'nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit ' +
-    'esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in ' +
-    'culpa qui officia deserunt mollit anim id est laborum.'
-  ).split(' ');
+  randomTextArr =
+    `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce iaculis ut velit ac commodo.
+     Ut hendrerit turpis vitae fermentum hendrerit. Pellentesque malesuada risus nec aliquam varius. 
+     Pellentesque quis fringilla arcu, sed tempor ipsum. Donec fermentum tempor lectus, efficitur efficitur lorem elementum at. 
+     Morbi et euismod quam. Aliquam gravida mauris leo, ac suscipit purus elementum vel. 
+     Phasellus mattis lorem in ligula vestibulum finibus. Sed tempor velit tellus, quis auctor nunc molestie nec. 
+     Etiam et interdum nisi, nec mattis leo. Donec pharetra aliquet ante ac faucibus. Nullam interdum finibus ex. 
+     Fusce commodo feugiat mi, et dignissim erat malesuada a. 
+     Nam id nisl augue. Praesent facilisis velit at massa condimentum vehicula. 
+     Sed porttitor lorem mollis mauris laoreet, sed interdum ligula placerat. 
+     Integer cursus lacus interdum, ullamcorper ex nec, porttitor massa. Etiam et aliquet felis. 
+     Sed scelerisque gravida placerat. Maecenas eleifend libero nec tincidunt ultrices. 
+     Nunc mattis lectus ligula, ac ornare ipsum finibus sit amet. 
+     Nam venenatis vehicula elit vel interdum. Pellentesque ullamcorper, urna varius faucibus imperdiet, 
+     est massa congue purus, aliquet fringilla mauris magna nec nunc. Aliquam erat volutpat. Etiam sit amet fringilla dui. 
+     Maecenas congue magna ac sapien laoreet, ac aliquet neque posuere. Sed tempus fermentum eros quis bibendum. 
+     Nam condimentum quis magna non rutrum. Fusce ultrices nibh vitae tellus convallis, vel feugiat quam facilisis. 
+     Sed sit amet diam in risus placerat feugiat. Curabitur euismod nibh in nibh posuere, egestas faucibus tellus fringilla. 
+     Vivamus et cursus est, ut pretium ipsum. Nam non mi tristique, aliquet arcu at, porttitor nulla. 
+     Nulla suscipit erat mi, vitae pharetra metus interdum eu. Sed ex ante, rutrum quis massa at, pulvinar lobortis urna. 
+     Duis ultricies elit eget tellus porttitor dictum. Phasellus et semper diam. Nunc non blandit nunc. 
+     Phasellus in lectus in lacus convallis auctor sed et turpis. Nulla in nisi finibus, consequat quam id, commodo elit. 
+     Pellentesque vitae gravida metus. Nullam at turpis tristique, iaculis purus at, consectetur tellus. 
+     Vestibulum eros libero, pellentesque a leo a, porta ullamcorper leo. Suspendisse commodo mattis augue, 
+     nec vulputate quam finibus vitae. Curabitur ut luctus arcu, in faucibus mi. Vestibulum risus justo, venenatis ut mi ac, 
+     blandit aliquet enim. Fusce at enim laoreet, gravida elit id, laoreet nunc. Proin nibh nisi, vehicula id dapibus ut, 
+     sollicitudin ut libero. Phasellus ante lectus, iaculis quis dolor nec, scelerisque hendrerit leo. 
+     Suspendisse egestas cursus erat vel fermentum. Etiam efficitur volutpat dolor, lobortis commodo ex consequat nec. 
+     Phasellus convallis est vel finibus viverra. Nulla sagittis elementum nibh eget tristique. 
+     Maecenas tincidunt nulla sit amet rhoncus auctor. Cras vestibulum pharetra libero finibus auctor. 
+     Praesent purus velit, euismod nec nulla vitae, ornare venenatis nisi. Proin euismod nisi sit amet justo convallis volutpat. 
+     Proin maximus, dolor sed varius mattis, tortor est dapibus tellus, vitae pellentesque libero enim sed massa.`.split(
+      ' ',
+    );
   threads: WritableSignal<Thread[]> = signal(
     Array(20)
       .fill(null)
       .map(() => ({
-        id: Math.random() * 1000,
+        id: this.getRandomNumber(),
         title:
-          this.randomTextArr[
-            Math.floor(this.randomTextArr.length * Math.random())
-          ] +
+          this.getRandomText(1) +
           ' ' +
-          this.randomTextArr[
-            Math.floor(this.randomTextArr.length * Math.random())
-          ]
-            .replaceAll(',', '')
-            .replaceAll('.', ''),
-        avatar:
-          'https://picsum.photos/100?workAround=' +
-          Math.floor(Math.random() * 100),
-        status: Math.floor(Math.random() * 4),
-        lastActivity: this.randomDate(new Date('2024-03-03'), new Date()),
-        unreadCount: Math.round(Math.random())
-          ? 1 + Math.floor(Math.random() * 20)
+          this.getRandomText(1).replaceAll(',', '').replaceAll('.', ''),
+        avatar: this.getRandomImageUrl(100),
+        status: this.getRandomNumber({ max: 3 }),
+        lastActivity: this.randomDate(),
+        unreadCount: this.getRandomBoolean()
+          ? this.getRandomNumber({ max: 20 })
           : 0,
-        pinned: !!Math.round(Math.random()),
-        muted: !!Math.round(Math.random()),
+        pinned: this.getRandomBoolean(),
+        muted: this.getRandomBoolean(),
         lastMessage: {
-          id: Math.random() * 1000,
+          id: this.getRandomNumber(),
           owner: {
             id: 1234,
-            avatar:
-              'https://picsum.photos/100?workAround=' +
-              Math.floor(Math.random() * 100),
+            avatar: this.getRandomImageUrl(100),
             name: this.user.name,
           },
-          text: this.shuffle(
-            this.randomTextArr.slice(
-              0,
-              1 + Math.floor(this.randomTextArr.length * Math.random()),
-            ),
-          ).join(' '),
-          createdAt: new Date(),
+          text: this.getRandomText({ max: 200 }),
+          createdAt: this.randomDate(),
           deliveredAt: new Date(),
           readAt: new Date(),
         },
@@ -161,12 +173,10 @@ export class ChatComponent {
       this.messages?.set([
         ...(this.messages() as Message[]),
         {
-          id: Math.random() * 1000,
+          id: this.getRandomNumber(),
           owner: {
             id: 1234,
-            avatar:
-              'https://picsum.photos/100?workAround=' +
-              Math.floor(Math.random() * 100),
+            avatar: this.getRandomImageUrl(100),
             name: this.user.name,
           },
           text: this.messageText,
@@ -188,20 +198,13 @@ export class ChatComponent {
             this.messages?.set([
               ...(this.messages() as Message[]),
               {
-                id: Math.random() * 1000,
+                id: this.getRandomNumber(),
                 owner: {
                   id: 4321,
-                  avatar:
-                    'https://picsum.photos/100?workAround=' +
-                    Math.floor(Math.random() * 100),
+                  avatar: this.getRandomImageUrl(100),
                   name: this.selectedThread()?.title ?? '',
                 },
-                text: this.shuffle(
-                  this.randomTextArr.slice(
-                    0,
-                    1 + Math.floor(this.randomTextArr.length * Math.random()),
-                  ),
-                ).join(' '),
+                text: this.getRandomText({ max: 200 }),
                 createdAt: new Date(),
                 deliveredAt: new Date(),
                 readAt: new Date(),
@@ -222,32 +225,29 @@ export class ChatComponent {
       Array(40)
         .fill(null)
         .map(() => {
-          const ownerUser = Math.round(Math.random());
+          const ownerUser = this.getRandomBoolean();
           const messageType = Math.random();
-          const hasText = Math.round(Math.random());
-          const imgOriginalWidth = Math.floor(Math.random() * 200) + 200;
-          const imgOriginalHeight = Math.floor(Math.random() * 200) + 200;
+          const hasText = this.getRandomBoolean();
+          const imgOriginalWidth = this.getRandomNumber({
+            min: 200,
+            max: 400,
+          });
+          const imgOriginalHeight = this.getRandomNumber({
+            min: 200,
+            max: 400,
+          });
           return {
-            id: Math.random() * 1000,
+            id: this.getRandomNumber(),
             owner: {
               id: ownerUser ? 1234 : 4321,
-              avatar:
-                'https://picsum.photos/100?workAround=' +
-                Math.floor(Math.random() * 100),
+              avatar: this.getRandomImageUrl(100),
               name: ownerUser ? this.user.name : thread.title,
             },
             text:
               (messageType > 0.5 && hasText) || messageType <= 0.5
-                ? this.shuffle(
-                    this.randomTextArr.slice(
-                      0,
-                      1 +
-                        Math.floor(
-                          (messageType > 0.5 ? 30 : this.randomTextArr.length) *
-                            Math.random(),
-                        ),
-                    ),
-                  ).join(' ')
+                ? this.getRandomText(
+                    messageType > 0.5 ? { max: 30 } : { max: 200 },
+                  )
                 : undefined,
             file:
               messageType > 0.85
@@ -266,9 +266,10 @@ export class ChatComponent {
               messageType <= 0.85 && messageType > 0.5
                 ? {
                     name: 'a photo',
-                    url: `https://picsum.photos/${Math.floor(Math.random() * 2000)}/${Math.floor(
-                      Math.random() * 2000,
-                    )}?workAround=${Math.floor(Math.random() * 100)}`,
+                    url: this.getRandomImageUrl({
+                      width: this.getRandomNumber({ max: 2000 }),
+                      height: this.getRandomNumber({ max: 2000 }),
+                    }),
                     originalWidth: imgOriginalWidth,
                     originalHeight: imgOriginalHeight,
                   }
@@ -283,12 +284,54 @@ export class ChatComponent {
     setTimeout(() => this.scrollToBottom(true, true));
   }
 
-  randomDate(start: Date, end: Date): Date {
+  getRandomText(length?: { min?: number; max?: number } | number): string {
+    let textArray = this.randomTextArr;
+    const minLength = typeof length === 'number' ? length : length?.min ?? 1;
+    const maxLength =
+      typeof length === 'number' ? length : length?.max ?? textArray.length;
+    while (maxLength > textArray.length) {
+      textArray = [...textArray, ...this.randomTextArr];
+    }
+    return this.shuffle(textArray)
+      .slice(
+        0,
+        Math.ceil(
+          ((maxLength ?? textArray.length) - (minLength ?? 0)) * Math.random() +
+            (minLength ?? 0),
+        ),
+      )
+      .join(' ')
+      .trim();
+  }
+
+  getRandomNumber(config?: { min?: number; max?: number }): number {
+    return (
+      Math.floor(
+        ((config?.max ?? Number.MAX_VALUE) - (config?.min ?? 0)) *
+          Math.random() +
+          (config?.min ?? 0),
+      ) + 1
+    );
+  }
+  getRandomBoolean(): boolean {
+    return Math.random() >= 0.5;
+  }
+
+  randomDate(
+    start: Date = new Date('1970-01-01'),
+    end: Date = new Date(),
+  ): Date {
     return new Date(
       start.getTime() + Math.random() * (end.getTime() - start.getTime()),
     );
   }
-
+  getRandomImageUrl(
+    config?: { width: number; height: number } | number,
+  ): string {
+    const width = typeof config === 'number' ? config : config?.width ?? 200;
+    const height = typeof config === 'number' ? config : config?.height ?? 200;
+    return `https://picsum.photos/${width}/${height}?workAround=${Math.floor(Math.random() * 10000)}`;
+  }
   shuffle(array: string[]): string[] {
     let currentIndex = array.length;
     let randomIndex = 1;
