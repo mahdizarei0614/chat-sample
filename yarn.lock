@@ -1989,6 +1989,11 @@
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.27.8.tgz#6667fac16c436b5434a387a34dedb013198f6e6e"
   integrity sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==
 
+"@skybluedev/random.js@1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@skybluedev/random.js/-/random.js-1.1.4.tgz#11509113bfcef9d751d2147f3488f715c7c32e7d"
+  integrity sha512-LgEW3Gy1p9tVhqFobPqHN0ehPptM8W6KEtt24tkc/NzgBoJJqHywMgKPrQwsnKjVXd/PBaiu99HSdf3934XM0w==
+
 "@socket.io/component-emitter@~3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@socket.io/component-emitter/-/component-emitter-3.1.0.tgz#96116f2a912e0c02817345b3c10751069920d553"

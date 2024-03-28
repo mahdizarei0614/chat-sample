@@ -17,6 +17,7 @@ import { UtilChatTimeBadgePipe } from '../util-chat-time-badge.pipe';
 import { ChatMessageComponent } from '../chat-message/chat-message.component';
 import { FormsModule } from '@angular/forms';
 import { isBrowser } from '../../../app.component';
+import random from '@skybluedev/random.js';
 
 @Component({
   selector: 'chat',
@@ -76,66 +77,27 @@ export class ChatComponent {
   user = {
     name: 'Mahdi Zarei',
   };
-  randomTextArr =
-    `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce iaculis ut velit ac commodo.
-     Ut hendrerit turpis vitae fermentum hendrerit. Pellentesque malesuada risus nec aliquam varius. 
-     Pellentesque quis fringilla arcu, sed tempor ipsum. Donec fermentum tempor lectus, efficitur efficitur lorem elementum at. 
-     Morbi et euismod quam. Aliquam gravida mauris leo, ac suscipit purus elementum vel. 
-     Phasellus mattis lorem in ligula vestibulum finibus. Sed tempor velit tellus, quis auctor nunc molestie nec. 
-     Etiam et interdum nisi, nec mattis leo. Donec pharetra aliquet ante ac faucibus. Nullam interdum finibus ex. 
-     Fusce commodo feugiat mi, et dignissim erat malesuada a. 
-     Nam id nisl augue. Praesent facilisis velit at massa condimentum vehicula. 
-     Sed porttitor lorem mollis mauris laoreet, sed interdum ligula placerat. 
-     Integer cursus lacus interdum, ullamcorper ex nec, porttitor massa. Etiam et aliquet felis. 
-     Sed scelerisque gravida placerat. Maecenas eleifend libero nec tincidunt ultrices. 
-     Nunc mattis lectus ligula, ac ornare ipsum finibus sit amet. 
-     Nam venenatis vehicula elit vel interdum. Pellentesque ullamcorper, urna varius faucibus imperdiet, 
-     est massa congue purus, aliquet fringilla mauris magna nec nunc. Aliquam erat volutpat. Etiam sit amet fringilla dui. 
-     Maecenas congue magna ac sapien laoreet, ac aliquet neque posuere. Sed tempus fermentum eros quis bibendum. 
-     Nam condimentum quis magna non rutrum. Fusce ultrices nibh vitae tellus convallis, vel feugiat quam facilisis. 
-     Sed sit amet diam in risus placerat feugiat. Curabitur euismod nibh in nibh posuere, egestas faucibus tellus fringilla. 
-     Vivamus et cursus est, ut pretium ipsum. Nam non mi tristique, aliquet arcu at, porttitor nulla. 
-     Nulla suscipit erat mi, vitae pharetra metus interdum eu. Sed ex ante, rutrum quis massa at, pulvinar lobortis urna. 
-     Duis ultricies elit eget tellus porttitor dictum. Phasellus et semper diam. Nunc non blandit nunc. 
-     Phasellus in lectus in lacus convallis auctor sed et turpis. Nulla in nisi finibus, consequat quam id, commodo elit. 
-     Pellentesque vitae gravida metus. Nullam at turpis tristique, iaculis purus at, consectetur tellus. 
-     Vestibulum eros libero, pellentesque a leo a, porta ullamcorper leo. Suspendisse commodo mattis augue, 
-     nec vulputate quam finibus vitae. Curabitur ut luctus arcu, in faucibus mi. Vestibulum risus justo, venenatis ut mi ac, 
-     blandit aliquet enim. Fusce at enim laoreet, gravida elit id, laoreet nunc. Proin nibh nisi, vehicula id dapibus ut, 
-     sollicitudin ut libero. Phasellus ante lectus, iaculis quis dolor nec, scelerisque hendrerit leo. 
-     Suspendisse egestas cursus erat vel fermentum. Etiam efficitur volutpat dolor, lobortis commodo ex consequat nec. 
-     Phasellus convallis est vel finibus viverra. Nulla sagittis elementum nibh eget tristique. 
-     Maecenas tincidunt nulla sit amet rhoncus auctor. Cras vestibulum pharetra libero finibus auctor. 
-     Praesent purus velit, euismod nec nulla vitae, ornare venenatis nisi. Proin euismod nisi sit amet justo convallis volutpat. 
-     Proin maximus, dolor sed varius mattis, tortor est dapibus tellus, vitae pellentesque libero enim sed massa.`.split(
-      ' ',
-    );
   threads: WritableSignal<Thread[]> = signal(
     Array(20)
       .fill(null)
       .map(() => ({
-        id: this.getRandomNumber(),
-        title:
-          this.getRandomText(1) +
-          ' ' +
-          this.getRandomText(1).replaceAll(',', '').replaceAll('.', ''),
-        avatar: this.getRandomImageUrl(100),
-        status: this.getRandomNumber({ max: 3 }),
-        lastActivity: this.randomDate(),
-        unreadCount: this.getRandomBoolean()
-          ? this.getRandomNumber({ max: 20 })
-          : 0,
-        pinned: this.getRandomBoolean(),
-        muted: this.getRandomBoolean(),
+        id: random.number.get({ min: 1, max: 10000 }),
+        title: random.string.get(2).replaceAll(',', '').replaceAll('.', ''),
+        avatar: random.image.get(100),
+        status: random.number.get({ max: 3 }),
+        lastActivity: random.date.get(),
+        unreadCount: random.boolean.get() ? random.number.get({ max: 20 }) : 0,
+        pinned: random.boolean.get(),
+        muted: random.boolean.get(),
         lastMessage: {
-          id: this.getRandomNumber(),
+          id: random.number.get(),
           owner: {
             id: 1234,
-            avatar: this.getRandomImageUrl(100),
+            avatar: random.image.get(100),
             name: this.user.name,
           },
-          text: this.getRandomText({ max: 200 }),
-          createdAt: this.randomDate(),
+          text: random.string.get({ max: 200 }),
+          createdAt: random.date.get(),
           deliveredAt: new Date(),
           readAt: new Date(),
         },
@@ -145,6 +107,14 @@ export class ChatComponent {
   messages: WritableSignal<Message[] | undefined> = signal(undefined);
   replyingMessage: WritableSignal<Message | undefined> = signal(undefined);
   messageText = '';
+
+  constructor() {
+    if (isBrowser()) {
+      setInterval(() => {
+        console.log(random.string.get(10));
+      }, 200);
+    }
+  }
 
   scrollToBottom(force = false, instant = false): void {
     const container = this.chatContentElement?.nativeElement;
@@ -173,10 +143,10 @@ export class ChatComponent {
       this.messages?.set([
         ...(this.messages() as Message[]),
         {
-          id: this.getRandomNumber(),
+          id: random.number.get(),
           owner: {
             id: 1234,
-            avatar: this.getRandomImageUrl(100),
+            avatar: random.image.get(100),
             name: this.user.name,
           },
           text: this.messageText,
@@ -198,13 +168,13 @@ export class ChatComponent {
             this.messages?.set([
               ...(this.messages() as Message[]),
               {
-                id: this.getRandomNumber(),
+                id: random.number.get(),
                 owner: {
                   id: 4321,
-                  avatar: this.getRandomImageUrl(100),
+                  avatar: random.image.get(100),
                   name: this.selectedThread()?.title ?? '',
                 },
-                text: this.getRandomText({ max: 200 }),
+                text: random.string.get({ max: 200 }),
                 createdAt: new Date(),
                 deliveredAt: new Date(),
                 readAt: new Date(),
@@ -225,27 +195,27 @@ export class ChatComponent {
       Array(40)
         .fill(null)
         .map(() => {
-          const ownerUser = this.getRandomBoolean();
+          const ownerUser = random.boolean.get();
           const messageType = Math.random();
-          const hasText = this.getRandomBoolean();
-          const imgOriginalWidth = this.getRandomNumber({
+          const hasText = random.boolean.get();
+          const imgOriginalWidth = random.number.get({
             min: 200,
             max: 400,
           });
-          const imgOriginalHeight = this.getRandomNumber({
+          const imgOriginalHeight = random.number.get({
             min: 200,
             max: 400,
           });
           return {
-            id: this.getRandomNumber(),
+            id: random.number.get(),
             owner: {
               id: ownerUser ? 1234 : 4321,
-              avatar: this.getRandomImageUrl(100),
+              avatar: random.image.get(100),
               name: ownerUser ? this.user.name : thread.title,
             },
             text:
               (messageType > 0.5 && hasText) || messageType <= 0.5
-                ? this.getRandomText(
+                ? random.string.get(
                     messageType > 0.5 ? { max: 30 } : { max: 200 },
                   )
                 : undefined,
@@ -266,15 +236,15 @@ export class ChatComponent {
               messageType <= 0.85 && messageType > 0.5
                 ? {
                     name: 'a photo',
-                    url: this.getRandomImageUrl({
-                      width: this.getRandomNumber({ max: 2000 }),
-                      height: this.getRandomNumber({ max: 2000 }),
+                    url: random.image.get({
+                      width: random.number.get({ max: 2000 }),
+                      height: random.number.get({ max: 2000 }),
                     }),
                     originalWidth: imgOriginalWidth,
                     originalHeight: imgOriginalHeight,
                   }
                 : undefined,
-            createdAt: this.randomDate(new Date('2024-03-03'), new Date()),
+            createdAt: random.date.get(new Date('2024-03-03'), new Date()),
             deliveredAt: new Date(),
             readAt: new Date(),
           };
@@ -282,68 +252,6 @@ export class ChatComponent {
         .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()),
     );
     setTimeout(() => this.scrollToBottom(true, true));
-  }
-
-  getRandomText(length?: { min?: number; max?: number } | number): string {
-    let textArray = this.randomTextArr;
-    const minLength = typeof length === 'number' ? length : length?.min ?? 1;
-    const maxLength =
-      typeof length === 'number' ? length : length?.max ?? textArray.length;
-    while (maxLength > textArray.length) {
-      textArray = [...textArray, ...this.randomTextArr];
-    }
-    return this.shuffle(textArray)
-      .slice(
-        0,
-        Math.ceil(
-          ((maxLength ?? textArray.length) - (minLength ?? 0)) * Math.random() +
-            (minLength ?? 0),
-        ),
-      )
-      .join(' ')
-      .trim();
-  }
-
-  getRandomNumber(config?: { min?: number; max?: number }): number {
-    return (
-      Math.floor(
-        ((config?.max ?? Number.MAX_VALUE) - (config?.min ?? 0)) *
-          Math.random() +
-          (config?.min ?? 0),
-      ) + 1
-    );
-  }
-  getRandomBoolean(): boolean {
-    return Math.random() >= 0.5;
-  }
-
-  randomDate(
-    start: Date = new Date('1970-01-01'),
-    end: Date = new Date(),
-  ): Date {
-    return new Date(
-      start.getTime() + Math.random() * (end.getTime() - start.getTime()),
-    );
-  }
-  getRandomImageUrl(
-    config?: { width: number; height: number } | number,
-  ): string {
-    const width = typeof config === 'number' ? config : config?.width ?? 200;
-    const height = typeof config === 'number' ? config : config?.height ?? 200;
-    return `https://picsum.photos/${width}/${height}?workAround=${Math.floor(Math.random() * 10000)}`;
-  }
-  shuffle(array: string[]): string[] {
-    let currentIndex = array.length;
-    let randomIndex = 1;
-    while (currentIndex > 0) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex],
-        array[currentIndex],
-      ];
-    }
-    return array;
   }
 }
 
