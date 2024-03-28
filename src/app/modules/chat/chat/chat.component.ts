@@ -74,7 +74,11 @@ import Random from '@skybluedev/random.js';
 export class ChatComponent {
   @ViewChild('chatContentElement', { read: ElementRef })
   chatContentElement!: ElementRef;
-  random = new Random();
+  random = new Random({
+    date: {
+      minDate: new Date('2024-01-01'),
+    },
+  });
   user = {
     name: 'Mahdi Zarei',
   };
@@ -84,7 +88,7 @@ export class ChatComponent {
       .map(() => ({
         id: this.random.number.get({ min: 1, max: 10000 }),
         title: this.random.string
-          .get(2)
+          .get({ fixedLength: 2 })
           .replaceAll(',', '')
           .replaceAll('.', ''),
         avatar: this.random.image.get(100),
