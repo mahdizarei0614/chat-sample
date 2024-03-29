@@ -86,28 +86,28 @@ export class ChatComponent {
     Array(20)
       .fill(null)
       .map(() => ({
-        id: this.random.number.get({ min: 1, max: 10000 }),
-        title: this.random.string
-          .get({ fixedLength: 2 })
+        id: this.random.number({ min: 1, max: 10000 }),
+        title: this.random
+          .string({ fixedLength: 2 })
           .replaceAll(',', '')
           .replaceAll('.', ''),
-        avatar: this.random.image.get(100),
-        status: this.random.number.get({ max: 3 }),
-        lastActivity: this.random.date.get(),
-        unreadCount: this.random.boolean.get()
-          ? this.random.number.get({ max: 20 })
+        avatar: this.random.image(100),
+        status: this.random.number({ max: 3 }),
+        lastActivity: this.random.date(),
+        unreadCount: this.random.boolean()
+          ? this.random.number({ max: 20 })
           : 0,
-        pinned: this.random.boolean.get(),
-        muted: this.random.boolean.get(),
+        pinned: this.random.boolean(),
+        muted: this.random.boolean(),
         lastMessage: {
-          id: this.random.number.get(),
+          id: this.random.number(),
           owner: {
             id: 1234,
-            avatar: this.random.image.get(100),
+            avatar: this.random.image(100),
             name: this.user.name,
           },
-          text: this.random.string.get({ max: 200 }),
-          createdAt: this.random.date.get(),
+          text: this.random.string({ maxLength: 200 }),
+          createdAt: this.random.date(),
           deliveredAt: new Date(),
           readAt: new Date(),
         },
@@ -145,10 +145,10 @@ export class ChatComponent {
       this.messages?.set([
         ...(this.messages() as Message[]),
         {
-          id: this.random.number.get(),
+          id: this.random.number(),
           owner: {
             id: 1234,
-            avatar: this.random.image.get(100),
+            avatar: this.random.image(100),
             name: this.user.name,
           },
           text: this.messageText,
@@ -170,13 +170,13 @@ export class ChatComponent {
             this.messages?.set([
               ...(this.messages() as Message[]),
               {
-                id: this.random.number.get(),
+                id: this.random.number(),
                 owner: {
                   id: 4321,
-                  avatar: this.random.image.get(100),
+                  avatar: this.random.image(100),
                   name: this.selectedThread()?.title ?? '',
                 },
-                text: this.random.string.get({ max: 200 }),
+                text: this.random.string({ maxLength: 200 }),
                 createdAt: new Date(),
                 deliveredAt: new Date(),
                 readAt: new Date(),
@@ -197,28 +197,28 @@ export class ChatComponent {
       Array(40)
         .fill(null)
         .map(() => {
-          const ownerUser = this.random.boolean.get();
+          const ownerUser = this.random.boolean();
           const messageType = Math.random();
-          const hasText = this.random.boolean.get();
-          const imgOriginalWidth = this.random.number.get({
+          const hasText = this.random.boolean();
+          const imgOriginalWidth = this.random.number({
             min: 200,
             max: 400,
           });
-          const imgOriginalHeight = this.random.number.get({
+          const imgOriginalHeight = this.random.number({
             min: 200,
             max: 400,
           });
           return {
-            id: this.random.number.get(),
+            id: this.random.number(),
             owner: {
               id: ownerUser ? 1234 : 4321,
-              avatar: this.random.image.get(100),
+              avatar: this.random.image(100),
               name: ownerUser ? this.user.name : thread.title,
             },
             text:
               (messageType > 0.5 && hasText) || messageType <= 0.5
-                ? this.random.string.get(
-                    messageType > 0.5 ? { max: 30 } : { max: 200 },
+                ? this.random.string(
+                    messageType > 0.5 ? { maxLength: 30 } : { maxLength: 200 },
                   )
                 : undefined,
             file:
@@ -238,15 +238,15 @@ export class ChatComponent {
               messageType <= 0.85 && messageType > 0.5
                 ? {
                     name: 'a photo',
-                    url: this.random.image.get({
-                      width: this.random.number.get({ max: 2000 }),
-                      height: this.random.number.get({ max: 2000 }),
+                    url: this.random.image({
+                      width: this.random.number({ max: 2000 }),
+                      height: this.random.number({ max: 2000 }),
                     }),
                     originalWidth: imgOriginalWidth,
                     originalHeight: imgOriginalHeight,
                   }
                 : undefined,
-            createdAt: this.random.date.get(new Date('2024-03-03'), new Date()),
+            createdAt: this.random.date(),
             deliveredAt: new Date(),
             readAt: new Date(),
           };
